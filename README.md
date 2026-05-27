@@ -6,162 +6,102 @@ Enterprise full-stack healthcare management platform with a Spring Boot 3 backen
 
 - Backend: Spring Boot 3, Java 17, Spring Security 6, JWT, JPA, MySQL, Maven, Swagger/OpenAPI
 - Frontend: React, Vite, Tailwind CSS, Axios, React Router, Recharts, Toast notifications
+# Doctor & Patient Management System
 
-## Folder Structure
+Enterprise full-stack hospital management app with a React (Vite + Tailwind) frontend and a Spring Boot backend.
 
-```text
-doctor-patient-management-system/
-  backend/
-    pom.xml
-    src/main/java/com/hospital/management/...
-    src/main/resources/application.properties
-    src/main/resources/sql/schema.sql
-  frontend/
-    package.json
-    src/...
-  postman/
-    Doctor-Patient-Management-System.postman_collection.json
-```
+This README provides everything needed to run the project locally, test the API, and understand the architecture.
 
-## Backend Setup
+---
 
-1. By default the backend starts against an in-memory H2 database so the app runs without local MySQL setup.
-2. To use MySQL instead, set `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` before starting the backend.
-3. Run the backend from the `backend/` folder.
+## Quick start (recommended)
 
-### Backend Run Command
+Prerequisites:
+- Java 21
+- Maven
+- Node.js 18+ and npm
+- (Optional) MySQL for production testing
 
-```bash
+Start backend (defaults to H2 in-memory DB):
+
+```powershell
+cd backend
 mvn spring-boot:run
 ```
 
-### Optional MySQL Configuration
+Start frontend (Vite dev server):
 
-Set these environment variables if you want to point the backend at your own MySQL instance:
-
-- `DB_URL=jdbc:mysql://localhost:3306/doctor_patient_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC`
-- `DB_USERNAME=root`
-- `DB_PASSWORD=your_password`
-
-### Default Demo Credentials
-
-- Admin: `admin@hospital.com` / `Admin@123`
-- Doctor: `sarah.khan@hospital.com` / `Doctor@123`
-- Doctor: `michael.reed@hospital.com` / `Doctor@123`
-- Doctor: `priya.nair@hospital.com` / `Doctor@123`
-- Doctor: `daniel.ortiz@hospital.com` / `Doctor@123`
-- Patient: `john.mathews@hospital.com` / `Patient@123`
-- Patient: `aisha.verma@hospital.com` / `Patient@123`
-- Patient: `lucas.brown@hospital.com` / `Patient@123`
-- Patient: `sophia.patel@hospital.com` / `Patient@123`
-
-## Frontend Setup
-
-1. Install dependencies in the `frontend/` folder.
-2. Set `VITE_API_BASE_URL` if your backend is not on `http://localhost:8080/api`.
-3. Start the Vite dev server and open `http://localhost:5173/`.
-
-### Frontend Run Command
-
-```bash
+```powershell
+cd frontend
 npm install
+$env:VITE_API_BASE_URL='http://localhost:8080/api' # PowerShell example; use .env for permanent
 npm run dev
 ```
 
-## Database Schema
+Open the UI at: http://localhost:5173/
 
-The schema is defined in `backend/src/main/resources/sql/schema.sql`.
+Open Swagger UI at: http://localhost:8080/swagger-ui.html
 
-Core tables:
+---
 
-- `users`
-- `doctors`
-- `patients`
-- `appointments`
-- `prescriptions`
-- `medical_records`
+## Project structure (high level)
 
-## API Overview
+- `backend/` — Spring Boot application, controllers under `com.hospital.management.controller`, security under `com.hospital.management.security`.
+- `frontend/` — React app (Vite), pages under `src/pages`, shared `src/api/client.js` contains the axios instance.
+- `postman/` — Postman collection for manual API testing.
 
-### Authentication
+---
 
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `GET /api/auth/me`
+## Environment variables
 
-### Doctors
+Backend (set before running if you want MySQL):
 
-- `GET /api/doctors`
-- `GET /api/doctors/{id}`
-- `GET /api/doctors/me/patients`
-- `POST /api/doctors`
-- `PUT /api/doctors/{id}`
-- `DELETE /api/doctors/{id}`
+- `DB_URL` — JDBC URL (example: `jdbc:mysql://localhost:3306/doctor_patient_db?createDatabaseIfNotExist=true&useSSL=false`)
+- `DB_USERNAME`
+- `DB_PASSWORD`
 
-### Patients
+Frontend (Vite):
+- `VITE_API_BASE_URL` — base API URL, e.g. `http://localhost:8080/api`. If not set, frontend uses `/api`.
 
-- `GET /api/patients`
-- `GET /api/patients/{id}`
-- `GET /api/patients/me`
-- `PUT /api/patients/me`
-- `POST /api/patients`
-- `PUT /api/patients/{id}`
-- `DELETE /api/patients/{id}`
+Security: JWTs are used for authentication; demo credentials are seeded on startup.
 
-### Appointments
+---
 
-- `GET /api/appointments`
-- `GET /api/appointments/my`
-- `POST /api/appointments`
-- `PUT /api/appointments/{id}`
-- `PATCH /api/appointments/{id}/status`
-- `DELETE /api/appointments/{id}`
+## Demo accounts
 
-### Prescriptions
+- Admin: `admin@hospital.com` / `Admin@123`
+- Doctor: `sarah.khan@hospital.com` / `Doctor@123`
+- Patient: `john.mathews@hospital.com` / `Patient@123`
 
-- `GET /api/prescriptions`
-- `GET /api/prescriptions/my`
-- `POST /api/prescriptions`
-- `DELETE /api/prescriptions/{id}`
+---
 
-### Medical Records
+## Important endpoints (sample)
 
-- `GET /api/medical-records/my`
-- `POST /api/medical-records`
-- `PUT /api/medical-records/{id}`
-- `DELETE /api/medical-records/{id}`
+- `POST /api/auth/login` — login (returns JWT)
+- `GET /api/auth/me` — fetch profile
+- `GET /api/dashboard/stats` — dashboard stats
+- `GET/POST/PUT/DELETE /api/doctors`
+- `GET/POST/PUT/DELETE /api/patients`
+- `GET/POST/PUT/PATCH /api/appointments`
 
-### Dashboard
+Full list is available in the code under `backend/src/main/java/com/hospital/management/controller` and via Swagger.
 
-- `GET /api/dashboard/stats`
+---
 
-## Swagger
+## Testing with Postman
 
-Open `http://localhost:8080/swagger-ui.html` after starting the backend.
+1. Import `postman/Doctor-Patient-Management-System.postman_collection.json`.
+2. Set environment variable `baseUrl` to `http://localhost:8080/api`.
+3. `POST /api/auth/login` to receive a token, then use Bearer token for protected requests.
 
-## Frontend Preview
+---
 
-Run the frontend with Vite and open `http://localhost:5173/` to see the app.
+## Notes & Tips
 
-## Postman Testing Steps
+- The frontend stores the JWT in `localStorage` (`hospital_token`) and the axios client attaches it on each request.
+- The backend config (`SecurityConfig`) permits CORS for common dev origins (`localhost:5173`, `localhost:3000`).
+- Seed data is injected by `DataSeeder` on startup to make demos quick.
 
-1. Import the collection from `postman/Doctor-Patient-Management-System.postman_collection.json`.
-2. Create an environment variable `baseUrl` with value `http://localhost:8080/api`.
-3. Login with the admin account and store the JWT token in `token`.
-4. Use the bearer token for protected requests.
-5. Test doctor, patient, appointment, prescription, and dashboard endpoints.
+---
 
-## Notes
-
-- Sample seed data is inserted automatically on startup by `DataSeeder`.
-- The frontend uses JWT session persistence, protected routes, dark mode, and role-based menus.
-- The demo dataset now includes multiple doctors and patients so the tables and dashboards look fuller during trials.
-
-## Completed Showcase Features
-
-- Doctor availability fields in admin doctor management.
-- Admin patient creation with assigned doctor selection.
-- Patient profile editing from the profile page.
-- Appointment edit, cancel, and status management flows.
-- Shared table pagination and loading placeholders.
-- Expanded dashboard analytics cards and recent-activity panels.
+If you want, I can add a `frontend/.env.example`, a short CONTRIBUTING.md, or create a GitHub Release for the current commit.
