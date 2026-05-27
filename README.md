@@ -1,73 +1,72 @@
-# Doctor & Patient Management System
+# 🏥 Doctor & Patient Management System
 
-Enterprise full-stack healthcare management platform with a Spring Boot 3 backend and a React + Tailwind frontend.
-
-## Tech Stack
-
-- Backend: Spring Boot 3, Java 17, Spring Security 6, JWT, JPA, MySQL, Maven, Swagger/OpenAPI
-- Frontend: React, Vite, Tailwind CSS, Axios, React Router, Recharts, Toast notifications
-# Doctor & Patient Management System
-
-Enterprise full-stack hospital management app with a React (Vite + Tailwind) frontend and a Spring Boot backend.
-
-This README provides everything needed to run the project locally, test the API, and understand the architecture.
+A modern full-stack hospital management app with a React (Vite + Tailwind) frontend and a Spring Boot backend. Includes JWT authentication, role-based access, seeded demo data, Swagger API docs, and a production-like API surface for appointments, prescriptions, and medical records.
 
 ---
 
-## Quick start (recommended)
+## ✨ Highlights
+
+- Secure JWT authentication (role-based: Admin / Doctor / Patient)
+- Full CRUD APIs for doctors, patients, appointments, prescriptions, and medical records
+- React + Vite frontend with reusable components and protected routes
+- Spring Boot backend, Spring Security, and JPA (Hibernate)
+- Seeded demo data for quick demos
+
+---
+
+## 🚀 Quick start
 
 Prerequisites:
 - Java 21
 - Maven
 - Node.js 18+ and npm
-- (Optional) MySQL for production testing
+- (Optional) MySQL for persistent storage
 
-Start backend (defaults to H2 in-memory DB):
+1) Start the backend (uses in-memory H2 DB by default):
 
 ```powershell
 cd backend
 mvn spring-boot:run
 ```
 
-Start frontend (Vite dev server):
+2) Start the frontend (Vite dev server):
 
 ```powershell
 cd frontend
 npm install
-$env:VITE_API_BASE_URL='http://localhost:8080/api' # PowerShell example; use .env for permanent
+$env:VITE_API_BASE_URL='http://localhost:8080/api'  # PowerShell example; place in frontend/.env for permanence
 npm run dev
 ```
 
-Open the UI at: http://localhost:5173/
+Open the UI: http://localhost:5173/
 
-Open Swagger UI at: http://localhost:8080/swagger-ui.html
-
----
-
-## Project structure (high level)
-
-- `backend/` — Spring Boot application, controllers under `com.hospital.management.controller`, security under `com.hospital.management.security`.
-- `frontend/` — React app (Vite), pages under `src/pages`, shared `src/api/client.js` contains the axios instance.
-- `postman/` — Postman collection for manual API testing.
+Open Swagger UI: http://localhost:8080/swagger-ui.html
 
 ---
 
-## Environment variables
+## 🗂 Project layout (high level)
 
-Backend (set before running if you want MySQL):
+- `backend/` — Spring Boot app (controllers in `com.hospital.management.controller`, security in `com.hospital.management.security`).
+- `frontend/` — React (Vite) app (pages in `src/pages`, API client at `src/api/client.js`).
+- `postman/` — Postman collection for manual testing.
 
-- `DB_URL` — JDBC URL (example: `jdbc:mysql://localhost:3306/doctor_patient_db?createDatabaseIfNotExist=true&useSSL=false`)
+---
+
+## ⚙️ Environment variables
+
+Backend (for MySQL):
+- `DB_URL` — JDBC URL (e.g. `jdbc:mysql://localhost:3306/doctor_patient_db?createDatabaseIfNotExist=true&useSSL=false`)
 - `DB_USERNAME`
 - `DB_PASSWORD`
 
 Frontend (Vite):
-- `VITE_API_BASE_URL` — base API URL, e.g. `http://localhost:8080/api`. If not set, frontend uses `/api`.
+- `VITE_API_BASE_URL` — e.g. `http://localhost:8080/api` (frontend falls back to `/api` if not set)
 
-Security: JWTs are used for authentication; demo credentials are seeded on startup.
+Security: JWT tokens are used for auth. Demo accounts are seeded on startup.
 
 ---
 
-## Demo accounts
+## 🔐 Demo accounts
 
 - Admin: `admin@hospital.com` / `Admin@123`
 - Doctor: `sarah.khan@hospital.com` / `Doctor@123`
@@ -75,33 +74,39 @@ Security: JWTs are used for authentication; demo credentials are seeded on start
 
 ---
 
-## Important endpoints (sample)
+## 🧭 Important API endpoints (examples)
 
 - `POST /api/auth/login` — login (returns JWT)
-- `GET /api/auth/me` — fetch profile
-- `GET /api/dashboard/stats` — dashboard stats
+- `GET /api/auth/me` — profile
+- `GET /api/dashboard/stats` — dashboard numbers
 - `GET/POST/PUT/DELETE /api/doctors`
 - `GET/POST/PUT/DELETE /api/patients`
 - `GET/POST/PUT/PATCH /api/appointments`
 
-Full list is available in the code under `backend/src/main/java/com/hospital/management/controller` and via Swagger.
+Full list: `backend/src/main/java/com/hospital/management/controller` or via Swagger UI.
 
 ---
 
-## Testing with Postman
+## 🧪 Testing with Postman
 
 1. Import `postman/Doctor-Patient-Management-System.postman_collection.json`.
-2. Set environment variable `baseUrl` to `http://localhost:8080/api`.
-3. `POST /api/auth/login` to receive a token, then use Bearer token for protected requests.
+2. Set `baseUrl` to `http://localhost:8080/api` in the Postman environment.
+3. `POST /api/auth/login` to obtain a token, then use Bearer auth for protected requests.
 
 ---
 
-## Notes & Tips
+## 💡 Notes & tips
 
-- The frontend stores the JWT in `localStorage` (`hospital_token`) and the axios client attaches it on each request.
-- The backend config (`SecurityConfig`) permits CORS for common dev origins (`localhost:5173`, `localhost:3000`).
-- Seed data is injected by `DataSeeder` on startup to make demos quick.
+- Frontend stores JWT in `localStorage` under `hospital_token`; the shared axios client attaches it automatically.
+- Backend CORS allows `localhost:5173` and `localhost:3000` for dev convenience (`SecurityConfig`).
+- Seed data from `DataSeeder` helps you demo without manual setup.
 
 ---
 
-If you want, I can add a `frontend/.env.example`, a short CONTRIBUTING.md, or create a GitHub Release for the current commit.
+## 🙋‍♂️ Want help pushing this to GitHub?
+
+I can commit the README locally (done) and push — if you want me to push, run `gh auth login` to authenticate the CLI, then `git push origin main`. If you'd rather use SSH, add your public key to GitHub and push via SSH.
+
+---
+
+If you'd like a badge header, `CONTRIBUTING.md`, or `.env.example`, tell me which and I'll add them.
